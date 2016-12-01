@@ -8,17 +8,14 @@ WWWLOGS_DIR=/home/wwwlogs
 [ -z "`grep ^'export PATH=' /etc/profile`" ] && echo "export PATH=$APACHE_INSTALL_DIR/bin:\$PATH" >> /etc/profile
 [ -n "`grep ^'export PATH=' /etc/profile`" -a -z "`grep $APACHE_INSTALL_DIR /etc/profile`" ] && sed -i "s@^export PATH=\(.*\)@export PATH=$APACHE_INSTALL_DIR/bin:\1@" /etc/profile
 source /etc/profile
-
 /bin/cp $APACHE_INSTALL_DIR/bin/apachectl /etc/init.d/httpd
-sed -i '2a # chkconfig: - 85 15' /etc/init.d/httpd
-sed -i '3a # description: Apache is a World Wide Web server. It is used to serve' /etc/init.d/httpd
 chmod +x /etc/init.d/httpd
-update-rc.d httpd defaults
+ldconfig
 
+# httpd.conf
 sed -i "s@^User daemon@User $RUN_USER@" $APACHE_INSTALL_DIR/conf/httpd.conf
 sed -i "s@^Group daemon@Group $RUN_USER@" $APACHE_INSTALL_DIR/conf/httpd.conf
 sed -i 's/^#ServerName www.example.com:80/ServerName 0.0.0.0:80/' $APACHE_INSTALL_DIR/conf/httpd.conf
-
 sed -i "s@AddType\(.*\)Z@AddType\1Z\n    AddType application/x-httpd-php .php .phtml\n    AddType application/x-httpd-php-source .phps@" $APACHE_INSTALL_DIR/conf/httpd.conf
 sed -i "s@#AddHandler cgi-script .cgi@AddHandler cgi-script .cgi .pl@" $APACHE_INSTALL_DIR/conf/httpd.conf
 sed -ri 's@^#(.*mod_suexec.so)@\1@' $APACHE_INSTALL_DIR/conf/httpd.conf
@@ -51,9 +48,9 @@ EOF
 mkdir $APACHE_INSTALL_DIR/conf/vhost
 cat > $APACHE_INSTALL_DIR/conf/vhost/0.conf << EOF
 <VirtualHost *:80>
-  ServerAdmin admin@linuxeye.com
+  ServerAdmin admin@admin.com
   DocumentRoot "$WWWROOT_DIR/default"
-  ServerName *
+  ServerName 127.0.0.1
   ErrorLog "$WWWLOGS_DIR/error_apache.log"
   CustomLog "$WWWLOGS_DIR/access_apache.log" common
 <Directory "$WWWROOT_DIR/default">
@@ -89,5 +86,3 @@ ServerTokens ProductOnly
 ServerSignature Off
 Include conf/vhost/*.conf
 EOF
-
-ldconfig

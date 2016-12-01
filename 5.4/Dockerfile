@@ -74,4 +74,4 @@ RUN chmod 777 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Define the default command.
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["httpd", "-D", "FOREGROUND"]
