@@ -5,7 +5,8 @@ RUN_USER=www
 WWWROOT_DIR=/home/wwwroot
 WWWLOGS_DIR=/home/wwwlogs
 
-sed -i "s@^export PATH=\(.*\)@export PATH=$APACHE_INSTALL_DIR/bin:\1@" /etc/profile
+[ -z "`grep ^'export PATH=' /etc/profile`" ] && echo "export PATH=$APACHE_INSTALL_DIR/bin:\$PATH" >> /etc/profile
+[ -n "`grep ^'export PATH=' /etc/profile`" -a -z "`grep $APACHE_INSTALL_DIR /etc/profile`" ] && sed -i "s@^export PATH=\(.*\)@export PATH=$APACHE_INSTALL_DIR/bin:\1@" /etc/profile
 source /etc/profile
 
 /bin/cp $APACHE_INSTALL_DIR/bin/apachectl /etc/init.d/httpd
