@@ -54,6 +54,7 @@ if [ -f "$PHP_INSTALL_DIR/etc/php.d/ext-opcache.ini" ];then
     sed -i "s@^opcache.memory_consumption.*@opcache.memory_consumption=$MEMORY_LIMIT@" $PHP_INSTALL_DIR/etc/php.d/ext-opcache.ini
 fi
 
+source /etc/profile
 service php-fpm start
 
 exec "$@"
