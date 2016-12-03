@@ -7,7 +7,7 @@ WWWLOGS_DIR=/home/wwwlogs
 
 [ -z "`grep ^'export PATH=' /etc/profile`" ] && echo "export PATH=$APACHE_INSTALL_DIR/bin:\$PATH" >> /etc/profile
 [ -n "`grep ^'export PATH=' /etc/profile`" -a -z "`grep $APACHE_INSTALL_DIR /etc/profile`" ] && sed -i "s@^export PATH=\(.*\)@export PATH=$APACHE_INSTALL_DIR/bin:\1@" /etc/profile
-source /etc/profile
+
 /bin/cp $APACHE_INSTALL_DIR/bin/apachectl /etc/init.d/httpd
 chmod +x /etc/init.d/httpd
 ldconfig
@@ -50,7 +50,7 @@ cat > $APACHE_INSTALL_DIR/conf/vhost/0.conf << EOF
 <VirtualHost *:80>
   ServerAdmin admin@admin.com
   DocumentRoot "$WWWROOT_DIR/default"
-  ServerName 127.0.0.1
+  ServerName 0.0.0.0
   ErrorLog "$WWWLOGS_DIR/error_apache.log"
   CustomLog "$WWWLOGS_DIR/access_apache.log" common
 <Directory "$WWWROOT_DIR/default">
